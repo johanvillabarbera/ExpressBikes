@@ -1,0 +1,156 @@
+version: "3.9"
+
+services:
+  django:
+    container_name: django
+    build: ./backend/django_backend
+    volumes:
+      - ./backend/django_backend:/app
+    ports:
+      - "8090:8090"
+    environment:
+      - PG_USER=${POSTGRES_USER}
+      - PG_PASSWORD=${POSTGRES_PASSWORD}
+      - PG_DB=${POSTGRES_DB}
+      - PG_PORT=5432
+      - PG_HOST=db
+      - CLAVE_API_FS=${CLAVE_API_FS}
+      - URL_FS=${URL_FS}
+      - VIRTUAL_HOST=djangoexpress.compays.es
+      - LETSENCRYPT_HOST=djangoexpress.compays.es
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    depends_on:
+      - db
+    networks:
+      - webproxy
+
+  db:
+    container_name: db
+    image: postgres:12
+    environment:
+      - POSTGRES_DB=${POSTGRES_USER}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - webproxy
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - VIRTUAL_HOST=pgadminexpress.compays.es
+      - LETSENCRYPT_HOST=pgadminexpress.compays.es
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - webproxy
+
+  frontend-react:
+    image: node:18.18
+    container_name: frontend_react
+    command: npm run dev
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    environment:
+      - VIRTUAL_HOST=expressbikes.compays.es
+      - LETSENCRYPT_HOST=expressbikes.compays.es
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      - CLAVE_API_FS_REACT=${CLAVE_API_FS_REACT}
+    volumes:
+      - ./react_frontend:/app
+    networks:
+      - webproxy
+  
+  # FASTIFY FOR FS
+
+  fastify:
+    container_name: fastify_app
+    build:
+      context: ./fastify_fs
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3000"
+    volumes:
+      - ./fastify_fs:/usr/src/app
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+  frontend-astro:
+    image: node:18.18 
+    container_name: frontend_astro
+    command: npm run dev
+    working_dir: /astro
+    volumes:
+      - ./astro_flowbite:/astro
+    ports:
+      - "2121:2121"
+  
+  #FACTURASCRIPTS / MYSQL / ADMINER
+  mysql:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_FS_PASSWORD}
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - expressbikes_interna
+
+  facturascripts:
+    image: facturascripts/facturascripts:latest
+    restart: always
+    ports:
+      - 8089:80
+    volumes:
+      - ./facturascripts:/var/www/html
+    environment:
+      - VIRTUAL_HOST=facturascriptexpress.compays.es
+      - LETSENCRYPT_HOST=facturascriptexpress.compays.es
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    networks:
+      - expressbikes_interna
+      - webproxy
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8091:8080
+    
+  ms_resend_nodets:
+    build: ./ms_resend
+    ports:
+      - "3010:3000"
+    volumes:
+      - ./ms_resend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VIRTUAL_HOST=resendexpress.compays.es
+      - LETSENCRYPT_HOST=resendexpress.compays.es
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+
+volumes:
+  pgdata: {}
+  pgadmin-data: {}
+
+networks:
+  expressbikes_interna:
+    driver: bridge
+  webproxy:
+    external: true

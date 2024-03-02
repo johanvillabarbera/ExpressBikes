@@ -1,0 +1,1625 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.17 (Debian 12.17-1.pgdg120+1)
+-- Dumped by pg_dump version 12.17 (Debian 12.17-1.pgdg120+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO usuario_post;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO usuario_post;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id bigint NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO usuario_post;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO usuario_post;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO usuario_post;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO usuario_post;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- Name: blacklist_blacklist; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.blacklist_blacklist (
+    id bigint NOT NULL,
+    token character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.blacklist_blacklist OWNER TO usuario_post;
+
+--
+-- Name: blacklist_blacklist_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.blacklist_blacklist_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.blacklist_blacklist_id_seq OWNER TO usuario_post;
+
+--
+-- Name: blacklist_blacklist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.blacklist_blacklist_id_seq OWNED BY public.blacklist_blacklist.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id bigint NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO usuario_post;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO usuario_post;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO usuario_post;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO usuario_post;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.django_migrations (
+    id bigint NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO usuario_post;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO usuario_post;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO usuario_post;
+
+--
+-- Name: rent_rent; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.rent_rent (
+    id bigint NOT NULL,
+    uuid character varying(36) NOT NULL,
+    status character varying(100) NOT NULL,
+    datetime_start timestamp with time zone NOT NULL,
+    datetime_finish timestamp with time zone,
+    latitude numeric(30,20) NOT NULL,
+    longitude numeric(30,20) NOT NULL,
+    uuid_bike_id bigint,
+    uuid_station_destination_id bigint,
+    uuid_station_origin_id bigint,
+    uuid_user_id bigint
+);
+
+
+ALTER TABLE public.rent_rent OWNER TO usuario_post;
+
+--
+-- Name: rent_rent_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.rent_rent_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.rent_rent_id_seq OWNER TO usuario_post;
+
+--
+-- Name: rent_rent_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.rent_rent_id_seq OWNED BY public.rent_rent.id;
+
+
+--
+-- Name: stations_bike; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.stations_bike (
+    id bigint NOT NULL,
+    uuid character varying(36) NOT NULL,
+    sname character varying(100) NOT NULL,
+    status character varying(100) NOT NULL,
+    model character varying(100) NOT NULL,
+    brand character varying(100) NOT NULL,
+    batery character varying(100) NOT NULL,
+    lat numeric(30,20) NOT NULL,
+    lng numeric(30,20) NOT NULL,
+    rfid_tag character varying(100)
+);
+
+
+ALTER TABLE public.stations_bike OWNER TO usuario_post;
+
+--
+-- Name: stations_bike_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.stations_bike_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stations_bike_id_seq OWNER TO usuario_post;
+
+--
+-- Name: stations_bike_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.stations_bike_id_seq OWNED BY public.stations_bike.id;
+
+
+--
+-- Name: stations_slot; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.stations_slot (
+    id bigint NOT NULL,
+    uuid character varying(36) NOT NULL,
+    status character varying(100) NOT NULL,
+    uuid_bike_id bigint,
+    uuid_station_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.stations_slot OWNER TO usuario_post;
+
+--
+-- Name: stations_slot_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.stations_slot_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stations_slot_id_seq OWNER TO usuario_post;
+
+--
+-- Name: stations_slot_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.stations_slot_id_seq OWNED BY public.stations_slot.id;
+
+
+--
+-- Name: stations_station; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.stations_station (
+    id bigint NOT NULL,
+    uuid character varying(36) NOT NULL,
+    name character varying(100) NOT NULL,
+    latitude numeric(30,20) NOT NULL,
+    longitude numeric(30,20) NOT NULL,
+    status character varying(100) NOT NULL,
+    description character varying(200) NOT NULL,
+    img character varying(201) NOT NULL
+);
+
+
+ALTER TABLE public.stations_station OWNER TO usuario_post;
+
+--
+-- Name: stations_station_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.stations_station_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stations_station_id_seq OWNER TO usuario_post;
+
+--
+-- Name: stations_station_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.stations_station_id_seq OWNED BY public.stations_station.id;
+
+
+--
+-- Name: users_plan; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.users_plan (
+    id bigint NOT NULL,
+    uuid character varying(36) NOT NULL,
+    "productIdFs" integer NOT NULL,
+    description character varying(3000) NOT NULL,
+    available_time integer NOT NULL,
+    datetime_start date NOT NULL,
+    datetime_finish date NOT NULL,
+    uuid_user_id bigint
+);
+
+
+ALTER TABLE public.users_plan OWNER TO usuario_post;
+
+--
+-- Name: users_plan_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.users_plan_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_plan_id_seq OWNER TO usuario_post;
+
+--
+-- Name: users_plan_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.users_plan_id_seq OWNED BY public.users_plan.id;
+
+
+--
+-- Name: users_user; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.users_user (
+    id bigint NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    uuid character varying(36) NOT NULL,
+    username character varying(30) NOT NULL,
+    email character varying(254) NOT NULL,
+    type character varying(10) NOT NULL
+);
+
+
+ALTER TABLE public.users_user OWNER TO usuario_post;
+
+--
+-- Name: users_user_groups; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.users_user_groups (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.users_user_groups OWNER TO usuario_post;
+
+--
+-- Name: users_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.users_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_user_groups_id_seq OWNER TO usuario_post;
+
+--
+-- Name: users_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.users_user_groups_id_seq OWNED BY public.users_user_groups.id;
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_user_id_seq OWNER TO usuario_post;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users_user.id;
+
+
+--
+-- Name: users_user_user_permissions; Type: TABLE; Schema: public; Owner: usuario_post
+--
+
+CREATE TABLE public.users_user_user_permissions (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.users_user_user_permissions OWNER TO usuario_post;
+
+--
+-- Name: users_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: usuario_post
+--
+
+CREATE SEQUENCE public.users_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_user_user_permissions_id_seq OWNER TO usuario_post;
+
+--
+-- Name: users_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: usuario_post
+--
+
+ALTER SEQUENCE public.users_user_user_permissions_id_seq OWNED BY public.users_user_user_permissions.id;
+
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: blacklist_blacklist id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.blacklist_blacklist ALTER COLUMN id SET DEFAULT nextval('public.blacklist_blacklist_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: rent_rent id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.rent_rent ALTER COLUMN id SET DEFAULT nextval('public.rent_rent_id_seq'::regclass);
+
+
+--
+-- Name: stations_bike id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_bike ALTER COLUMN id SET DEFAULT nextval('public.stations_bike_id_seq'::regclass);
+
+
+--
+-- Name: stations_slot id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_slot ALTER COLUMN id SET DEFAULT nextval('public.stations_slot_id_seq'::regclass);
+
+
+--
+-- Name: stations_station id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_station ALTER COLUMN id SET DEFAULT nextval('public.stations_station_id_seq'::regclass);
+
+
+--
+-- Name: users_plan id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_plan ALTER COLUMN id SET DEFAULT nextval('public.users_plan_id_seq'::regclass);
+
+
+--
+-- Name: users_user id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user ALTER COLUMN id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- Name: users_user_groups id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_groups ALTER COLUMN id SET DEFAULT nextval('public.users_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: users_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.users_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can view log entry	1	view_logentry
+5	Can add permission	2	add_permission
+6	Can change permission	2	change_permission
+7	Can delete permission	2	delete_permission
+8	Can view permission	2	view_permission
+9	Can add group	3	add_group
+10	Can change group	3	change_group
+11	Can delete group	3	delete_group
+12	Can view group	3	view_group
+13	Can add content type	4	add_contenttype
+14	Can change content type	4	change_contenttype
+15	Can delete content type	4	delete_contenttype
+16	Can view content type	4	view_contenttype
+17	Can add session	5	add_session
+18	Can change session	5	change_session
+19	Can delete session	5	delete_session
+20	Can view session	5	view_session
+21	Can add station	6	add_station
+22	Can change station	6	change_station
+23	Can delete station	6	delete_station
+24	Can view station	6	view_station
+25	Can add bike	7	add_bike
+26	Can change bike	7	change_bike
+27	Can delete bike	7	delete_bike
+28	Can view bike	7	view_bike
+29	Can add slot	8	add_slot
+30	Can change slot	8	change_slot
+31	Can delete slot	8	delete_slot
+32	Can view slot	8	view_slot
+33	Can add user	9	add_user
+34	Can change user	9	change_user
+35	Can delete user	9	delete_user
+36	Can view user	9	view_user
+37	Can add plan	10	add_plan
+38	Can change plan	10	change_plan
+39	Can delete plan	10	delete_plan
+40	Can view plan	10	view_plan
+41	Can add blacklist	11	add_blacklist
+42	Can change blacklist	11	change_blacklist
+43	Can delete blacklist	11	delete_blacklist
+44	Can view blacklist	11	view_blacklist
+45	Can add rent	12	add_rent
+46	Can change rent	12	change_rent
+47	Can delete rent	12	delete_rent
+48	Can view rent	12	view_rent
+\.
+
+
+--
+-- Data for Name: blacklist_blacklist; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.blacklist_blacklist (id, token) FROM stdin;
+1	eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im1pZ3VlbCIsImV4cCI6MTcwODQwNDc1MX0.c40h9AugbVUUEFwhQSZOn3AIUXzSzW8ICSlf7ypzlF4
+2	eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImpvaGFuIiwiZXhwIjoxNzA4NDA3MjA4fQ.UJBvH5767tdbVS6-2Qr9zcSbBT-5kMw6fuASSkAdTPg
+\.
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	admin	logentry
+2	auth	permission
+3	auth	group
+4	contenttypes	contenttype
+5	sessions	session
+6	stations	station
+7	stations	bike
+8	stations	slot
+9	users	user
+10	users	plan
+11	blacklist	blacklist
+12	rent	rent
+\.
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2024-02-12 16:16:06.843839+00
+2	contenttypes	0002_remove_content_type_name	2024-02-12 16:16:06.855907+00
+3	auth	0001_initial	2024-02-12 16:16:06.897581+00
+4	auth	0002_alter_permission_name_max_length	2024-02-12 16:16:06.906612+00
+5	auth	0003_alter_user_email_max_length	2024-02-12 16:16:06.917024+00
+6	auth	0004_alter_user_username_opts	2024-02-12 16:16:06.925544+00
+7	auth	0005_alter_user_last_login_null	2024-02-12 16:16:06.933946+00
+8	auth	0006_require_contenttypes_0002	2024-02-12 16:16:06.936171+00
+9	auth	0007_alter_validators_add_error_messages	2024-02-12 16:16:06.946603+00
+10	auth	0008_alter_user_username_max_length	2024-02-12 16:16:06.957947+00
+11	auth	0009_alter_user_last_name_max_length	2024-02-12 16:16:06.96615+00
+12	auth	0010_alter_group_name_max_length	2024-02-12 16:16:06.974994+00
+13	auth	0011_update_proxy_permissions	2024-02-12 16:16:06.982479+00
+14	auth	0012_alter_user_first_name_max_length	2024-02-12 16:16:06.990192+00
+15	users	0001_initial	2024-02-12 16:16:07.03977+00
+16	admin	0001_initial	2024-02-12 16:16:07.067756+00
+17	admin	0002_logentry_remove_auto_add	2024-02-12 16:16:07.083308+00
+18	admin	0003_logentry_add_action_flag_choices	2024-02-12 16:16:07.096127+00
+19	blacklist	0001_initial	2024-02-12 16:16:07.107421+00
+20	stations	0001_initial	2024-02-12 16:16:07.120373+00
+21	stations	0002_bike	2024-02-12 16:16:07.136441+00
+22	stations	0003_slot	2024-02-12 16:16:07.158492+00
+23	rent	0001_initial	2024-02-12 16:16:07.198654+00
+24	rent	0002_alter_rent_datetime_finish	2024-02-12 16:16:07.214644+00
+25	rent	0003_alter_rent_uuid_bike	2024-02-12 16:16:07.241913+00
+26	rent	0004_auto_20240207_1859	2024-02-12 16:16:07.293928+00
+27	sessions	0001_initial	2024-02-12 16:16:07.313092+00
+28	stations	0004_bike_rfid_tag	2024-02-12 16:16:07.322786+00
+29	users	0002_plan	2024-02-12 16:16:07.359039+00
+\.
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: rent_rent; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.rent_rent (id, uuid, status, datetime_start, datetime_finish, latitude, longitude, uuid_bike_id, uuid_station_destination_id, uuid_station_origin_id, uuid_user_id) FROM stdin;
+2	5731bce1-f4a9-912c-1093-d7a0d5098947	FINISHED	2024-02-12 18:08:31.81293+00	2024-02-12 18:09:58.408374+00	38.82106654451630000000	-0.60101602228999010000	\N	\N	\N	2
+3	9d7dc1c9-63e7-731c-b0bb-499b2f070c66	FINISHED	2024-02-12 18:12:15.907219+00	2024-02-12 18:12:28.735055+00	99.00000000000000000000	99.00000000000000000000	\N	\N	\N	2
+\.
+
+
+--
+-- Data for Name: stations_bike; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.stations_bike (id, uuid, sname, status, model, brand, batery, lat, lng, rfid_tag) FROM stdin;
+2	cc0102a0-7d52-4939-5bf2-2049988fb323	ONT1	NOT_RENTED	KAWA	Z10	89	0.00000000000000000000	0.00000000000000000000	\N
+3	7f393c87-2855-d47b-0c6a-a872be7ca57f	ONT2	NOT_RENTED	KAWA	Z10	87	0.00000000000000000000	0.00000000000000000000	\N
+\.
+
+
+--
+-- Data for Name: stations_slot; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.stations_slot (id, uuid, status, uuid_bike_id, uuid_station_id) FROM stdin;
+4	61b8c91f-00cd-7211-f3a9-abe561a33a54	FREE	\N	4
+6	cb5024ea-51fb-5a84-0bbe-634bf17ca773	FREE	\N	6
+7	f6da8980-dc2a-cf46-dcaf-7cf15fe318db	FREE	\N	7
+8	61c858ad-4adb-5e64-d9a6-cab9d56cc48c	FREE	\N	8
+3	465c1ee4-634d-89cd-5e63-d3b528181243	OCCUPED	2	3
+5	a41766ee-e59b-429a-402b-da0f3c991d6a	OCCUPED	3	5
+\.
+
+
+--
+-- Data for Name: stations_station; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.stations_station (id, uuid, name, latitude, longitude, status, description, img) FROM stdin;
+3	4326d546-670a-590d-564e-9f0df7e37bc8	Polideportivo Ontinyent	38.81358953463233500000	-0.61071739897247050000	OPEN	En las escaleras	aa
+4	19cf9abc-61a3-8318-c0af-9fb807c50cc6	Estacion de Trenes	38.80983429394656500000	-0.60204138971778020000	OPEN	Justo arriba del instituto	aa
+5	719ea49a-b04f-472f-df04-72600f1a2bd7	Hospital Nuevo	38.80988158657445000000	-0.60729878747324660000	OPEN	En la salida	aa
+6	5eb2df5f-61fb-4af1-a125-fec6d2386875	Benarrai	38.81806107069881000000	-0.60402134279580300000	OPEN	Al lado del parque	aa
+7	66e70475-ec6a-bdf3-d3d5-33296a3b8afd	Estelles	38.81937669110079000000	-0.60117752172296720000	OPEN	En la esquina	aa
+8	32129386-dab1-b6e1-b593-c53c4ca36b16	El clariano	38.82617355197339000000	-0.59145530637260220000	OPEN	Justo delante	aa
+\.
+
+
+--
+-- Data for Name: users_plan; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.users_plan (id, uuid, "productIdFs", description, available_time, datetime_start, datetime_finish, uuid_user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users_user; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.users_user (id, password, last_login, is_superuser, uuid, username, email, type) FROM stdin;
+1	pbkdf2_sha256$260000$GUDI3TOxDGt0ybf4KxuDlh$fWePnSYztZYcqp2nH8y0Z0C0Hi8t0eAAC6gCk4CUp4c=	\N	f	350c338d-1282-9b4c-e428-5fbde3360f4b	miguel	miguel@gmail.com	client
+2	pbkdf2_sha256$260000$OyEviWI9JKh2SK4bkSpxps$uHi2FCxoiwrZ6f+npO7DGMWuf79kUhZOddehyfdocek=	\N	f	ce1c20d6-1922-e6f3-84f2-956a474591eb	johan	johan@gmail.com	admin
+\.
+
+
+--
+-- Data for Name: users_user_groups; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.users_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: usuario_post
+--
+
+COPY public.users_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 48, true);
+
+
+--
+-- Name: blacklist_blacklist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.blacklist_blacklist_id_seq', 2, true);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 12, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 29, true);
+
+
+--
+-- Name: rent_rent_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.rent_rent_id_seq', 3, true);
+
+
+--
+-- Name: stations_bike_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.stations_bike_id_seq', 3, true);
+
+
+--
+-- Name: stations_slot_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.stations_slot_id_seq', 8, true);
+
+
+--
+-- Name: stations_station_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.stations_station_id_seq', 8, true);
+
+
+--
+-- Name: users_plan_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.users_plan_id_seq', 1, false);
+
+
+--
+-- Name: users_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.users_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 2, true);
+
+
+--
+-- Name: users_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: usuario_post
+--
+
+SELECT pg_catalog.setval('public.users_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blacklist_blacklist blacklist_blacklist_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.blacklist_blacklist
+    ADD CONSTRAINT blacklist_blacklist_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blacklist_blacklist blacklist_blacklist_token_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.blacklist_blacklist
+    ADD CONSTRAINT blacklist_blacklist_token_key UNIQUE (token);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: rent_rent rent_rent_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.rent_rent
+    ADD CONSTRAINT rent_rent_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rent_rent rent_rent_uuid_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.rent_rent
+    ADD CONSTRAINT rent_rent_uuid_key UNIQUE (uuid);
+
+
+--
+-- Name: stations_bike stations_bike_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_bike
+    ADD CONSTRAINT stations_bike_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stations_bike stations_bike_uuid_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_bike
+    ADD CONSTRAINT stations_bike_uuid_key UNIQUE (uuid);
+
+
+--
+-- Name: stations_slot stations_slot_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_slot
+    ADD CONSTRAINT stations_slot_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stations_slot stations_slot_uuid_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_slot
+    ADD CONSTRAINT stations_slot_uuid_key UNIQUE (uuid);
+
+
+--
+-- Name: stations_station stations_station_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_station
+    ADD CONSTRAINT stations_station_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stations_station stations_station_uuid_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_station
+    ADD CONSTRAINT stations_station_uuid_key UNIQUE (uuid);
+
+
+--
+-- Name: users_plan users_plan_description_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_plan
+    ADD CONSTRAINT users_plan_description_key UNIQUE (description);
+
+
+--
+-- Name: users_plan users_plan_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_plan
+    ADD CONSTRAINT users_plan_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_plan users_plan_uuid_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_plan
+    ADD CONSTRAINT users_plan_uuid_key UNIQUE (uuid);
+
+
+--
+-- Name: users_user users_user_email_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user
+    ADD CONSTRAINT users_user_email_key UNIQUE (email);
+
+
+--
+-- Name: users_user_groups users_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_groups
+    ADD CONSTRAINT users_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_user_groups users_user_groups_user_id_group_id_b88eab82_uniq; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_groups
+    ADD CONSTRAINT users_user_groups_user_id_group_id_b88eab82_uniq UNIQUE (user_id, group_id);
+
+
+--
+-- Name: users_user users_user_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user
+    ADD CONSTRAINT users_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_user_user_permissions users_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_user_permissions
+    ADD CONSTRAINT users_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_user_user_permissions users_user_user_permissions_user_id_permission_id_43338c45_uniq; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_user_permissions
+    ADD CONSTRAINT users_user_user_permissions_user_id_permission_id_43338c45_uniq UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: users_user users_user_username_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user
+    ADD CONSTRAINT users_user_username_key UNIQUE (username);
+
+
+--
+-- Name: users_user users_user_uuid_key; Type: CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user
+    ADD CONSTRAINT users_user_uuid_key UNIQUE (uuid);
+
+
+--
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: blacklist_blacklist_token_6085a9c3_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX blacklist_blacklist_token_6085a9c3_like ON public.blacklist_blacklist USING btree (token varchar_pattern_ops);
+
+
+--
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: rent_rent_uuid_74c46c07_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX rent_rent_uuid_74c46c07_like ON public.rent_rent USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: rent_rent_uuid_bike_id_6180ff55; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX rent_rent_uuid_bike_id_6180ff55 ON public.rent_rent USING btree (uuid_bike_id);
+
+
+--
+-- Name: rent_rent_uuid_station_destination_id_4dfee8fa; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX rent_rent_uuid_station_destination_id_4dfee8fa ON public.rent_rent USING btree (uuid_station_destination_id);
+
+
+--
+-- Name: rent_rent_uuid_station_origin_id_4b3f9d48; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX rent_rent_uuid_station_origin_id_4b3f9d48 ON public.rent_rent USING btree (uuid_station_origin_id);
+
+
+--
+-- Name: rent_rent_uuid_user_id_be7fe94a; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX rent_rent_uuid_user_id_be7fe94a ON public.rent_rent USING btree (uuid_user_id);
+
+
+--
+-- Name: stations_bike_uuid_82bce6f1_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX stations_bike_uuid_82bce6f1_like ON public.stations_bike USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: stations_slot_uuid_5e626b54_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX stations_slot_uuid_5e626b54_like ON public.stations_slot USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: stations_slot_uuid_bike_id_fb53dd60; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX stations_slot_uuid_bike_id_fb53dd60 ON public.stations_slot USING btree (uuid_bike_id);
+
+
+--
+-- Name: stations_slot_uuid_station_id_eea3267b; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX stations_slot_uuid_station_id_eea3267b ON public.stations_slot USING btree (uuid_station_id);
+
+
+--
+-- Name: stations_station_uuid_3aab243a_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX stations_station_uuid_3aab243a_like ON public.stations_station USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: users_plan_description_b32b623c_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_plan_description_b32b623c_like ON public.users_plan USING btree (description varchar_pattern_ops);
+
+
+--
+-- Name: users_plan_uuid_e79060dc_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_plan_uuid_e79060dc_like ON public.users_plan USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: users_plan_uuid_user_id_67379fb3; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_plan_uuid_user_id_67379fb3 ON public.users_plan USING btree (uuid_user_id);
+
+
+--
+-- Name: users_user_email_243f6e77_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_user_email_243f6e77_like ON public.users_user USING btree (email varchar_pattern_ops);
+
+
+--
+-- Name: users_user_groups_group_id_9afc8d0e; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_user_groups_group_id_9afc8d0e ON public.users_user_groups USING btree (group_id);
+
+
+--
+-- Name: users_user_groups_user_id_5f6f5a90; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_user_groups_user_id_5f6f5a90 ON public.users_user_groups USING btree (user_id);
+
+
+--
+-- Name: users_user_user_permissions_permission_id_0b93982e; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_user_user_permissions_permission_id_0b93982e ON public.users_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: users_user_user_permissions_user_id_20aca447; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_user_user_permissions_user_id_20aca447 ON public.users_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: users_user_username_06e46fe6_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_user_username_06e46fe6_like ON public.users_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: users_user_uuid_6fe513d7_like; Type: INDEX; Schema: public; Owner: usuario_post
+--
+
+CREATE INDEX users_user_uuid_6fe513d7_like ON public.users_user USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_users_user_id FOREIGN KEY (user_id) REFERENCES public.users_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: rent_rent rent_rent_uuid_bike_id_6180ff55_fk_stations_bike_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.rent_rent
+    ADD CONSTRAINT rent_rent_uuid_bike_id_6180ff55_fk_stations_bike_id FOREIGN KEY (uuid_bike_id) REFERENCES public.stations_bike(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: rent_rent rent_rent_uuid_station_destina_4dfee8fa_fk_stations_; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.rent_rent
+    ADD CONSTRAINT rent_rent_uuid_station_destina_4dfee8fa_fk_stations_ FOREIGN KEY (uuid_station_destination_id) REFERENCES public.stations_station(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: rent_rent rent_rent_uuid_station_origin__4b3f9d48_fk_stations_; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.rent_rent
+    ADD CONSTRAINT rent_rent_uuid_station_origin__4b3f9d48_fk_stations_ FOREIGN KEY (uuid_station_origin_id) REFERENCES public.stations_station(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: rent_rent rent_rent_uuid_user_id_be7fe94a_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.rent_rent
+    ADD CONSTRAINT rent_rent_uuid_user_id_be7fe94a_fk_users_user_id FOREIGN KEY (uuid_user_id) REFERENCES public.users_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: stations_slot stations_slot_uuid_bike_id_fb53dd60_fk_stations_bike_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_slot
+    ADD CONSTRAINT stations_slot_uuid_bike_id_fb53dd60_fk_stations_bike_id FOREIGN KEY (uuid_bike_id) REFERENCES public.stations_bike(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: stations_slot stations_slot_uuid_station_id_eea3267b_fk_stations_station_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.stations_slot
+    ADD CONSTRAINT stations_slot_uuid_station_id_eea3267b_fk_stations_station_id FOREIGN KEY (uuid_station_id) REFERENCES public.stations_station(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_plan users_plan_uuid_user_id_67379fb3_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_plan
+    ADD CONSTRAINT users_plan_uuid_user_id_67379fb3_fk_users_user_id FOREIGN KEY (uuid_user_id) REFERENCES public.users_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_user_groups users_user_groups_group_id_9afc8d0e_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_groups
+    ADD CONSTRAINT users_user_groups_group_id_9afc8d0e_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_user_groups users_user_groups_user_id_5f6f5a90_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_groups
+    ADD CONSTRAINT users_user_groups_user_id_5f6f5a90_fk_users_user_id FOREIGN KEY (user_id) REFERENCES public.users_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_user_user_permissions users_user_user_perm_permission_id_0b93982e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_user_permissions
+    ADD CONSTRAINT users_user_user_perm_permission_id_0b93982e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: users_user_user_permissions users_user_user_permissions_user_id_20aca447_fk_users_user_id; Type: FK CONSTRAINT; Schema: public; Owner: usuario_post
+--
+
+ALTER TABLE ONLY public.users_user_user_permissions
+    ADD CONSTRAINT users_user_user_permissions_user_id_20aca447_fk_users_user_id FOREIGN KEY (user_id) REFERENCES public.users_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
