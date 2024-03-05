@@ -1,0 +1,40 @@
+
+#weather-panel {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  #location {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  #temperature {
+    font-size: 40px;
+    color: #3498db;
+  }
+
+  #icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+
+  #details {
+    margin-top: 10px;
+  }
+
+  #details p {
+    margin: 5px 0;
+  }
+
+  #date {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #555;
+  }
