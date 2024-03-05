@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from '@/hooks/auth/useAuth'
 import { useNavigate } from 'react-router-dom';
 import { useWeather } from "@/hooks/weather/useWeather";
+import './WeatherPanel.css';
 
 const WeatherPanel = () => {
   const { weather, setWeather, getWeather } = useWeather();
@@ -12,7 +13,7 @@ const WeatherPanel = () => {
   useEffect(() => {
     getWeather();
     console.log('clima: ', weather);
-  }, [setWeather]);
+  }, [getWeather]);
 
   const marcarComoLeidas = (uuid) => {
     console.log(`Incidencia ${uuid} marcada como leída.`);
@@ -38,61 +39,47 @@ const WeatherPanel = () => {
       <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 text-center">
         Clima de hoy
       </h1>
-      {/* <div className="space-y-4">
-        {notifyUser.length > 0
-        ?(
-            notifyUser.map((incidencia) => (
-                <div
-                  key={incidencia.uuid}
-                  className="bg-white shadow-lg rounded-lg p-4"
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="flex-1">
-                      <h2 className="text-md font-semibold text-gray-800">
-                        Estado:{" "}
-                        <span className="font-normal">{incidencia.status}</span>
-                      </h2>
-                      <p className="text-gray-600">
-                        Comentario: {incidencia.comment}
-                      </p>
-                      <p className="text-gray-500 text-sm">
-                        Fecha: {incidencia.date}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => marcarComoLeidas(incidencia.uuid)}
-                      className="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              ))
-        )
-    : (
-        <div className="text-center p-4 max-w-sm mx-auto bg-white rounded-lg border border-gray-200 shadow-md">
-          <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900">No hay notificaciones</h3>
-          <p className="text-gray-700">No tienes nuevas notificaciones en este momento. ¡Todo está tranquilo!</p>
+      {/* {weather.length > 0
+      ?(
+        <div id="weather-panel">
+          <div id="location">{weather.municipio.NOMBRE}, {weather?.municipio.NOMBRE_PROVINCIA}</div>
+          <div id="icon"><i className="fas fa-sun"></i></div>
+          <div id="temperature">25°C</div>
+          <div id="details">
+            <p>Precipitaciones: 10%</p>
+            <p>Humedad: 75%</p>
+            <p>Viento: 15 km/h</p>
+          </div>
+          <div id="date">Fecha: 3 de marzo de 2024</div>
         </div>
-      )}
-      </div> */}
-    </div>
+        
+      ) : (
+        <div id="weather-panel">
+          <div id="location">Prova, Prova</div>
+          <div id="icon"><i className="fas fa-sun"></i></div>
+          <div id="temperature">25°C</div>
+          <div id="details">
+            <p>Precipitaciones: 10%</p>
+            <p>Humedad: 75%</p>
+            <p>Viento: 15 km/h</p>
+          </div>
+          <div id="date">Fecha: 3 de marzo de 2024</div>
+        </div>
+      )} */}
+
+        <div id="weather-panel">
+          <div id="location">{weather.length > 0 ? weather?.municipio.NOMBRE ?? '' : ''}, {weather.length > 0 ? weather?.municipio.NOMBRE_PROVINCIA ?? '' : ''}</div>
+          <div id="icon"><i className="fas fa-sun"></i></div>
+          <div id="temperature">25°C</div>
+          <div id="details">
+            <p>Precipitaciones: 10%</p>
+            <p>Humedad: 75%</p>
+            <p>Viento: 15 km/h</p>
+          </div>
+          <div id="date">Fecha: 3 de marzo de 2024</div>
+        </div>
+
+      </div>
   );
 };
 

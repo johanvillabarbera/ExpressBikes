@@ -2,7 +2,7 @@ import { useContext, useState, useCallback } from "react"
 import WeatherService from "../../services/weather/WeatherService"
 
 export function useWeather() {
-    const [weather, setWeather] = useState([]);
+    const [weather, setWeather] = useState({});
 
     const getWeather = useCallback(() => {
         WeatherService.getWeather()
