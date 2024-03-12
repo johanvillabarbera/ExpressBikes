@@ -20,10 +20,12 @@
 namespace FacturaScripts\Core\Lib;
 
 use FacturaScripts\Core\Base\Calculator;
-use FacturaScripts\Core\Base\Database\DataBaseWhere;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Base\ExtensionsTrait;
 use FacturaScripts\Core\Model\Base\BusinessDocument;
 use FacturaScripts\Core\Model\Base\BusinessDocumentLine;
+use FacturaScripts\Core\Model\Base\TransformerDocument;
+use FacturaScripts\Core\Session;
 use FacturaScripts\Dinamic\Model\AttachedFileRelation;
 use FacturaScripts\Dinamic\Model\DocTransformation;
 
@@ -61,6 +63,10 @@ class BusinessDocumentGenerator
         $newDoc = new $newDocClass();
         $fields = array_keys($newDoc->getModelFields());
 
+        if (false === $this->pipeFalse('generateBefore', $prototype, $lines, $quantity, $properties, $newDoc)) {
+            return false;
+        }
+
         foreach (array_keys($prototype->getModelFields()) as $field) {
             // exclude properties not in new line
             if (false === in_array($field, $fields)) {
@@ -75,6 +81,9 @@ class BusinessDocumentGenerator
             // copy properties to new document
             $newDoc->{$field} = $prototype->{$field};
         }
+
+        // assign the user
+        $newDoc->nick = Session::user()->nick;
 
         if (self::$sameDate) {
             $newDoc->fecha = $prototype->fecha;
@@ -92,6 +101,8 @@ class BusinessDocumentGenerator
             if (Calculator::calculate($newDoc, $newLines, true)) {
                 // add to last doc list
                 $this->lastDocs[] = $newDoc;
+
+                $this->pipeFalse('generateTrue', $prototype, $lines, $quantity, $properties, $newDoc, $newLines);
                 return true;
             }
         }
@@ -100,6 +111,7 @@ class BusinessDocumentGenerator
             $newDoc->delete();
         }
 
+        $this->pipeFalse('generateFalse', $prototype, $lines, $quantity, $properties, $newDoc);
         return false;
     }
 
@@ -180,7 +192,9 @@ class BusinessDocumentGenerator
         }
 
         // copy related files
-        $this->copyRelatedFiles($prototype, $newDoc);
+        if ($newDoc instanceof TransformerDocument) {
+            $this->copyRelatedFiles($newDoc);
+        }
 
         if (false === $this->pipeFalse('cloneLines', $prototype, $newDoc, $lines, $quantity)) {
             return false;
@@ -189,23 +203,25 @@ class BusinessDocumentGenerator
         return true;
     }
 
-    public function copyRelatedFiles(BusinessDocument $prototype, BusinessDocument $newDoc): bool
+    public function copyRelatedFiles(TransformerDocument $newDoc): bool
     {
         $relationModel = new AttachedFileRelation();
-        $whereDocs = [
-            new DatabaseWhere('model', $prototype->modelClassName()),
-            new DataBaseWhere('modelid', $prototype->primaryColumnValue())
-        ];
-        foreach ($relationModel->all($whereDocs, ['id' => 'ASC']) as $relation) {
-            $newRelation = new AttachedFileRelation();
-            $newRelation->idfile = $relation->idfile;
-            $newRelation->model = $newDoc->modelClassName();
-            $newRelation->modelid = $newDoc->primaryColumnValue();
-            $newRelation->nick = $relation->nick;
-            $newRelation->observations = $relation->observations;
-            $newRelation->modelcode = $newDoc->codigo;
-            if (false === $newRelation->save()) {
-                return false;
+        foreach ($newDoc->parentDocuments() as $parent) {
+            $whereDocs = [
+                new DataBaseWhere('model', $parent->modelClassName()),
+                new DataBaseWhere('modelid', $parent->primaryColumnValue())
+            ];
+            foreach ($relationModel->all($whereDocs, ['id' => 'ASC']) as $relation) {
+                $newRelation = new AttachedFileRelation();
+                $newRelation->idfile = $relation->idfile;
+                $newRelation->model = $newDoc->modelClassName();
+                $newRelation->modelid = $newDoc->primaryColumnValue();
+                $newRelation->nick = $relation->nick;
+                $newRelation->observations = $relation->observations;
+                $newRelation->modelcode = $newDoc->codigo;
+                if (false === $newRelation->save()) {
+                    return false;
+                }
             }
         }
 

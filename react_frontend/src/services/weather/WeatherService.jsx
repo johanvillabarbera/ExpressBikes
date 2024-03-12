@@ -3,8 +3,8 @@ import WeatherEndpoints from './WeatherEndpoint'
 
 const WeatherService = {
     
-    getWeather() {
-        return api().get(WeatherEndpoints.GET)
+    getWeather(coordinates) {
+        return api().post(WeatherEndpoints.GET,{'coordinates':coordinates})
     }
 
 }

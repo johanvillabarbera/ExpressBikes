@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of FacturaScripts
- * Copyright (C) 2017-2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -36,19 +36,23 @@
         <column name="done" display="center" order="140">
             <widget type="checkbox" fieldname="done"/>
         </column>
-        <column name="duration" display="right" order="150">
+        <column name="failed" display="center" order="150">
+            <widget type="checkbox" fieldname="failed"/>
+        </column>
+        <column name="duration" display="right" order="160">
             <widget type="number" fieldname="duration">
                 <option color="danger">gt:30</option>
             </widget>
         </column>
-        <column name="date" display="right" order="160">
+        <column name="date" display="right" order="170">
             <widget type="datetime" fieldname="date"/>
         </column>
     </columns>
     <rows>
         <row type="status">
-            <option color="success" fieldname="enabled" title="enabled">1</option>
             <option color="warning" fieldname="enabled" title="disabled">0</option>
+            <option color="danger" fieldname="failed" title="failed">1</option>
+            <option color="success" fieldname="enabled" title="enabled">1</option>
         </row>
     </rows>
 </view>

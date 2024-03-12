@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of FacturaScripts
- * Copyright (C) 2018-2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -44,30 +44,36 @@
         <column name="address" order="170">
             <widget type="text" fieldname="direccion"/>
         </column>
-        <column name="city" order="180">
+        <column name="post-office-box" display="none" order="180">
+            <widget type="text" fieldname="apartado"/>
+        </column>
+        <column name="zip-code" display="none" order="190">
+            <widget type="text" fieldname="codpostal"/>
+        </column>
+        <column name="city" order="200">
             <widget type="text" fieldname="ciudad"/>
         </column>
-        <column name="province" order="190">
+        <column name="province" order="210">
             <widget type="text" fieldname="provincia"/>
         </column>
-        <column name="country" order="200">
+        <column name="country" order="220">
             <widget type="select" fieldname="codpais">
                 <values source="paises" fieldcode="codpais" fieldtitle="nombre"/>
             </widget>
         </column>
-        <column name="level" display="none" order="210">
+        <column name="level" display="none" order="230">
             <widget type="number" fieldname="level" decimal="0"/>
         </column>
-        <column name="points" display="none" order="220">
+        <column name="points" display="none" order="240">
             <widget type="number" fieldname="puntos" decimal="0"/>
         </column>
-        <column name="last-ip" display="none" order="230">
+        <column name="last-ip" display="none" order="250">
             <widget type="text" fieldname="lastip"/>
         </column>
-        <column name="creation-date" display="none" order="240">
+        <column name="creation-date" display="none" order="260">
             <widget type="date" fieldname="fechaalta"/>
         </column>
-        <column name="last-activity" display="none" order="250">
+        <column name="last-activity" display="none" order="270">
             <widget type="datetime" fieldname="lastactivity"/>
         </column>
     </columns>

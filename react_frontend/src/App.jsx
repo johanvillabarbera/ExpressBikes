@@ -13,6 +13,8 @@ import { RentContextProvider } from './context/Rent/RentContext'
 import { FSProductsContextProvider } from './context/FS_products/FSProducts' 
 import { IncidentContextProvider } from './context/Incident/IncidentContext' 
 import { IncidentsStagesContextProvider } from './context/IncidentStages/IncidentStages'
+import { WeatherContextProvider } from './context/weather/WeatherContext'
+
 // Import Guards
 import AdminGuard from '@/services/guards/admin/adminGuard'
 import AuthGuard from '@/services/guards/auth/authGuard'
@@ -58,45 +60,47 @@ function App() {
                     <FSProductsContextProvider>
                       <IncidentContextProvider>
                         <IncidentsStagesContextProvider>
-                      <WebSocketContextProvider>
-                      {isMobile ? null : <NavbarWeb />}
-                      <Routes>
-                        {isMobile 
-                        ? (
-                          <>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/station/:stationUUID" element={<StationApp />} />
-                            <Route path="/startRent/:bikeUUID" element={<QrStartRent />} />
-                            <Route path="/rentView/:bikeUUID" element={<RentView />} />
-                            <Route path="/qrScanner" element={<QrScanner />} />
-                            <Route path="/rentalDetails/:uuidRent" element={<DataFinishRent />} />
-                            <Route path="/reportIncident" element={<ReportIncident />} />
-                            <Route path="/notifies" element={<Notifies />} />
-                            <Route path="/weather" element={<WeatherPanel />} />
-                            <Route path="/profile" element={<Profile />} />
-                            <Route element={<AuthGuard />} >
-                              <Route path="/login" element={<Login />} />
-                              <Route path="/register" element={<Register />} />
-                            </Route>
-                          </>
-                        ) : (
-                          <>
-                              <Route path="/" element={<HomeWeb />} />
-                              <Route path="/prices" element={<PricingWeb />} />
-                            <Route element={<AuthGuard />} >
-                              <Route path="/login" element={<LoginWeb />} />
-                              <Route path="/register" element={<RegisterWeb />} />
-                            </Route>
-                            <Route element={<AdminGuard />} >
-                              <Route path="/dashboard" element={<AdminDashboard />} />
-                            </Route>
-                          </>
-                        )
-                        }
-                      </Routes>
-                      <Toaster />
-                      </WebSocketContextProvider>
-                      </IncidentsStagesContextProvider>
+                          <WeatherContextProvider>
+                            <WebSocketContextProvider>
+                            {isMobile ? null : <NavbarWeb />}
+                            <Routes>
+                              {isMobile 
+                              ? (
+                                <>
+                                  <Route path="/" element={<Home />} />
+                                  <Route path="/station/:stationUUID" element={<StationApp />} />
+                                  <Route path="/startRent/:bikeUUID" element={<QrStartRent />} />
+                                  <Route path="/rentView/:bikeUUID" element={<RentView />} />
+                                  <Route path="/qrScanner" element={<QrScanner />} />
+                                  <Route path="/rentalDetails/:uuidRent" element={<DataFinishRent />} />
+                                  <Route path="/reportIncident" element={<ReportIncident />} />
+                                  <Route path="/notifies" element={<Notifies />} />
+                                  <Route path="/weather" element={<WeatherPanel />} />
+                                  <Route path="/profile" element={<Profile />} />
+                                  <Route element={<AuthGuard />} >
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/register" element={<Register />} />
+                                  </Route>
+                                </>
+                              ) : (
+                                <>
+                                    <Route path="/" element={<HomeWeb />} />
+                                    <Route path="/prices" element={<PricingWeb />} />
+                                  <Route element={<AuthGuard />} >
+                                    <Route path="/login" element={<LoginWeb />} />
+                                    <Route path="/register" element={<RegisterWeb />} />
+                                  </Route>
+                                  <Route element={<AdminGuard />} >
+                                    <Route path="/dashboard" element={<AdminDashboard />} />
+                                  </Route>
+                                </>
+                              )
+                              }
+                            </Routes>
+                            <Toaster />
+                            </WebSocketContextProvider>
+                          </WeatherContextProvider>
+                        </IncidentsStagesContextProvider>
                       </IncidentContextProvider>
                     </FSProductsContextProvider>
                   </RentContextProvider>

@@ -8,6 +8,17 @@
     padding: 20px;
     text-align: center;
   }
+ 
+#station-panel {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 450px;
+  margin: 10px auto;
+  padding: 20px;
+  text-align: left;
+}
+
 
   #location {
     font-size: 20px;
@@ -15,6 +26,10 @@
     margin-bottom: 10px;
   }
 
+#temperature-panel {
+  display: flex;
+  justify-content: space-between;
+}
   #temperature {
     font-size: 40px;
     color: #3498db;

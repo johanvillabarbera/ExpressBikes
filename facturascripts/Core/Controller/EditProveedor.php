@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of FacturaScripts
- * Copyright (C) 2017-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,6 +22,7 @@ namespace FacturaScripts\Core\Controller;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\ComercialContactController;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\RegimenIVA;
 use FacturaScripts\Dinamic\Lib\SupplierRiskTools;
 
@@ -35,7 +36,6 @@ use FacturaScripts\Dinamic\Lib\SupplierRiskTools;
  */
 class EditProveedor extends ComercialContactController
 {
-
     /**
      * Returns the sum of the customer's total delivery notes.
      *
@@ -45,7 +45,7 @@ class EditProveedor extends ComercialContactController
     {
         $code = $this->getViewModelValue('EditProveedor', 'codproveedor');
         $total = SupplierRiskTools::getDeliveryNotesRisk($code);
-        return $this->toolBox()->coins()->format($total);
+        return Tools::money($total);
     }
 
     public function getImageUrl(): string
@@ -63,7 +63,7 @@ class EditProveedor extends ComercialContactController
     {
         $code = $this->getViewModelValue('EditProveedor', 'codproveedor');
         $total = SupplierRiskTools::getInvoicesRisk($code);
-        return $this->toolBox()->coins()->format($total);
+        return Tools::money($total);
     }
 
     public function getModelClassName(): string
@@ -83,6 +83,9 @@ class EditProveedor extends ComercialContactController
     protected function createDocumentView(string $viewName, string $model, string $label)
     {
         $this->createSupplierListView($viewName, $model, $label);
+
+        // botones
+        $this->setSettings($viewName, 'btnPrint', true);
         $this->addButtonGroupDocument($viewName);
         $this->addButtonApproveDocument($viewName);
     }
@@ -90,6 +93,9 @@ class EditProveedor extends ComercialContactController
     protected function createInvoiceView(string $viewName)
     {
         $this->createSupplierListView($viewName, 'FacturaProveedor', 'invoices');
+
+        // botones
+        $this->setSettings($viewName, 'btnPrint', true);
         $this->addButtonLockInvoice($viewName);
     }
 
@@ -102,11 +108,12 @@ class EditProveedor extends ComercialContactController
         $this->views[$viewName]->addOrderBy(['neto'], 'net');
         $this->views[$viewName]->addSearchFields(['referencia', 'refproveedor']);
 
-        // disable columns
+        // desactivamos la columna de proveedor
         $this->views[$viewName]->disableColumn('supplier');
 
-        // disable buttons
+        // botones
         $this->setSettings($viewName, 'btnNew', false);
+        $this->setSettings($viewName, 'btnPrint', true);
     }
 
     /**
@@ -201,8 +208,12 @@ class EditProveedor extends ComercialContactController
                 $view->loadData('', $where, ['idcontacto' => 'DESC']);
                 break;
 
-            case 'ListAlbaranProveedor':
             case 'ListFacturaProveedor':
+                $view->loadData('', $where);
+                $this->addButtonGenerateAccountingInvoices($viewName, $codproveedor);
+                break;
+
+            case 'ListAlbaranProveedor':
             case 'ListPedidoProveedor':
             case 'ListPresupuestoProveedor':
             case 'ListProductoProveedor':
@@ -235,7 +246,7 @@ class EditProveedor extends ComercialContactController
         $columnLangCode = $this->views[$viewName]->columnForName('language');
         if ($columnLangCode && $columnLangCode->widget->getType() === 'select') {
             $langs = [];
-            foreach ($this->toolBox()->i18n()->getAvailableLanguages() as $key => $value) {
+            foreach (Tools::lang()->getAvailableLanguages() as $key => $value) {
                 $langs[] = ['value' => $key, 'title' => $value];
             }
 

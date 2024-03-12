@@ -1,1 +1,1 @@
-a:6:{i:0;s:8:"settings";i:1;s:5:"users";i:2;s:5:"pages";i:3;s:8:"empresas";i:4;s:8:"api_keys";i:5;s:9:"productos";}
+a:7:{i:0;s:8:"empresas";i:1;s:5:"users";i:2;s:5:"pages";i:3;s:11:"roles_users";i:4;s:11:"work_events";i:5;s:8:"settings";i:6;s:8:"api_keys";}

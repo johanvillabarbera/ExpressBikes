@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of FacturaScripts
- * Copyright (C) 2015-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,6 +23,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\DataSrc\Paises;
 use FacturaScripts\Core\Lib\Vies;
 use FacturaScripts\Core\Tools;
+use FacturaScripts\Core\Validator;
 use FacturaScripts\Dinamic\Model\Agente as DinAgente;
 use FacturaScripts\Dinamic\Model\Cliente as DinCliente;
 use FacturaScripts\Dinamic\Model\Pais as DinPais;
@@ -107,6 +108,9 @@ class Contacto extends Base\Contact
     /** @var bool */
     public $verificado;
 
+    /** @var string */
+    public $web;
+
     public function alias(): string
     {
         if (empty($this->email) || strpos($this->email, '@') === false) {
@@ -154,7 +158,7 @@ class Contacto extends Base\Contact
     {
         $results = [];
         $field = empty($fieldCode) ? $this->primaryColumn() : $fieldCode;
-        $fields = 'apellidos|cifnif|descripcion|email|empresa|idcontacto|nombre|observaciones|telefono1|telefono2';
+        $fields = 'apellidos|cifnif|descripcion|email|empresa|nombre|observaciones|telefono1|telefono2';
         $where[] = new DataBaseWhere($fields, mb_strtolower($query, 'UTF8'), 'LIKE');
         foreach ($this->all($where) as $item) {
             $results[] = new CodeModel(['code' => $item->{$field}, 'description' => $item->fullName()]);
@@ -167,10 +171,10 @@ class Contacto extends Base\Contact
         $country = new DinPais();
         $where = [new DataBaseWhere('codiso', $this->codpais)];
         if ($country->loadFromCode($this->codpais) || $country->loadFromCode('', $where)) {
-            return Tools::fixHtml($country->nombre);
+            return Tools::fixHtml($country->nombre) ?? '';
         }
 
-        return $this->codpais;
+        return $this->codpais ?? '';
     }
 
     /**
@@ -206,6 +210,7 @@ class Contacto extends Base\Contact
             $cliente->razonsocial = empty($this->empresa) ? $this->fullName() : $this->empresa;
             $cliente->telefono1 = $this->telefono1;
             $cliente->telefono2 = $this->telefono2;
+            $cliente->web = $this->web;
             if ($cliente->save()) {
                 $this->codcliente = $cliente->codcliente;
                 $this->save();
@@ -236,6 +241,7 @@ class Contacto extends Base\Contact
             $proveedor->razonsocial = empty($this->empresa) ? $this->fullName() : $this->empresa;
             $proveedor->telefono1 = $this->telefono1;
             $proveedor->telefono2 = $this->telefono2;
+            $proveedor->web = $this->web;
             if ($proveedor->save()) {
                 $this->codproveedor = $proveedor->codproveedor;
                 $this->save();
@@ -264,7 +270,7 @@ class Contacto extends Base\Contact
      */
     public function newLogkey($ipAddress): string
     {
-        $this->lastactivity = date(self::DATETIME_STYLE);
+        $this->lastactivity = Tools::dateTime();
         $this->lastip = $ipAddress;
         $this->logkey = Tools::randomString(99);
         return $this->logkey;
@@ -305,6 +311,13 @@ class Contacto extends Base\Contact
         $this->direccion = Tools::noHtml($this->direccion) ?? '';
         $this->empresa = Tools::noHtml($this->empresa) ?? '';
         $this->provincia = Tools::noHtml($this->provincia) ?? '';
+        $this->web = Tools::noHtml($this->web) ?? '';
+
+        // comprobamos si la web es una url válida
+        if (!empty($this->web) && false === Validator::url($this->web)) {
+            Tools::log()->warning('invalid-web', ['%web%' => $this->web]);
+            return false;
+        }
 
         return $this->testPassword() && parent::test();
     }

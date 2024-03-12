@@ -2,5 +2,5 @@ from django.urls import path
 from .views import WeatherView
 
 urlpatterns = [
-    path('weather', WeatherView.as_view({'get': 'getWeather'})),
+    path('weather', WeatherView.as_view({'post': 'getWeather'})),
 ]

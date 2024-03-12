@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of FacturaScripts
- * Copyright (C) 2017-2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2017-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -47,9 +47,7 @@
                 </widget>
             </column>
             <column name="settlement-product" numcolumns="3" order="110">
-                <widget type="autocomplete" fieldname="idproducto" onclick="EditProducto">
-                    <values source="productos" fieldcode="idproducto" fieldtitle="referencia"/>
-                </widget>
+                <widget type="variante" fieldname="idproducto" match="idproducto" onclick="EditProducto"/>
             </column>
             <column name="creation-date" numcolumns="3" order="120">
                 <widget type="date" fieldname="fechaalta" readonly="true"/>
@@ -66,5 +64,5 @@
         <row type="statistics">
             <datalabel icon="fas fa-money-bill-alt" label="pending-invoices-button" function="calcAgentInvoicePending"/>
         </row>
-    </rows>    
+    </rows>
 </view>
