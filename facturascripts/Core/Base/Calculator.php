@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of FacturaScripts
- * Copyright (C) 2018-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2018-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -67,6 +67,11 @@ final class Calculator
         $doc->totaliva = $subtotals['totaliva'];
         $doc->totalrecargo = $subtotals['totalrecargo'];
         $doc->totalsuplidos = $subtotals['totalsuplidos'];
+
+        // si tiene totalbeneficio, lo asignamos
+        if (property_exists($doc, 'totalbeneficio')) {
+            $doc->totalbeneficio = $subtotals['totalbeneficio'];
+        }
 
         // si tiene totalcoste, lo asignamos
         if (property_exists($doc, 'totalcoste')) {
@@ -187,6 +192,9 @@ final class Calculator
         $subtotals['totalrecargo'] = round($subtotals['totalrecargo'], FS_NF0);
         $subtotals['totalsuplidos'] = round($subtotals['totalsuplidos'], FS_NF0);
 
+        // calculamos el beneficio
+        $subtotals['totalbeneficio'] = round($subtotals['neto'] - $subtotals['totalcoste'], FS_NF0);
+
         // calculamos el total
         $subtotals['total'] = round($subtotals['neto'] + $subtotals['totalsuplidos'] + $subtotals['totaliva']
             + $subtotals['totalrecargo'] - $subtotals['totalirpf'], FS_NF0);
@@ -257,8 +265,7 @@ final class Calculator
             }
 
             // ¿El régimen IVA es sin recargo de equivalencia?
-            if ($regimen != RegimenIVA::TAX_SYSTEM_SURCHARGE
-                && $company->regimeniva != RegimenIVA::TAX_SYSTEM_SURCHARGE) {
+            if ($regimen != RegimenIVA::TAX_SYSTEM_SURCHARGE) {
                 $line->recargo = 0.0;
             }
         }
@@ -315,9 +322,6 @@ final class Calculator
     {
         $line->pvpsindto = $line->cantidad * $line->pvpunitario;
         $line->pvptotal = $line->pvpsindto * (100 - $line->dtopor) / 100 * (100 - $line->dtopor2) / 100;
-
-        // desactivamos la función del modelo de recalcular pvpsindto y pvptotal
-        $line->disableUpdateTotals(true);
 
         // turno para que los mods apliquen cambios
         foreach (self::$mods as $mod) {

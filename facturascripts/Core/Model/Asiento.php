@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of FacturaScripts
- * Copyright (C) 2014-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2014-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,6 +20,8 @@
 namespace FacturaScripts\Core\Model;
 
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Base\Utils;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\Diario as DinDiario;
 use FacturaScripts\Dinamic\Model\Ejercicio as DinEjercicio;
 use FacturaScripts\Dinamic\Model\Partida as DinPartida;
@@ -137,8 +139,8 @@ class Asiento extends Base\ModelOnChangeClass
     {
         parent::clear();
         $this->editable = true;
-        $this->fecha = date(self::DATE_STYLE);
-        $this->idempresa = self::toolBox()::appSettings()->get('default', 'idempresa');
+        $this->fecha = Tools::date();
+        $this->idempresa = Tools::settings('default', 'idempresa');
         $this->importe = 0.0;
         $this->numero = '';
         $this->operacion = self::OPERATION_GENERAL;
@@ -147,7 +149,7 @@ class Asiento extends Base\ModelOnChangeClass
     public function delete(): bool
     {
         if (false === $this->editable()) {
-            self::toolBox()::i18nLog()->warning('non-editable-accounting-entry');
+            Tools::log()->warning('non-editable-accounting-entry');
             return false;
         }
 
@@ -161,7 +163,7 @@ class Asiento extends Base\ModelOnChangeClass
         }
 
         // add audit log
-        self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->warning('deleted-model', [
+        Tools::log(self::AUDIT_CHANNEL)->warning('deleted-model', [
             '%model%' => $this->modelClassName(),
             '%key%' => $this->primaryColumnValue(),
             '%desc%' => $this->primaryDescription(),
@@ -176,13 +178,13 @@ class Asiento extends Base\ModelOnChangeClass
     {
         $exercise = $this->getExercise();
         if (false === $exercise->isOpened()) {
-            self::toolBox()::i18nLog()->warning('closed-exercise', ['%exerciseName%' => $exercise->nombre]);
+            Tools::log()->warning('closed-exercise', ['%exerciseName%' => $exercise->nombre]);
             return false;
         }
 
         $reg = new DinRegularizacionImpuesto();
         if ($reg->loadFechaInside($this->fecha) && $reg->bloquear) {
-            self::toolBox()::i18nLog()->warning('accounting-within-regularization');
+            Tools::log()->warning('accounting-within-regularization');
             return false;
         }
 
@@ -202,12 +204,17 @@ class Asiento extends Base\ModelOnChangeClass
     /**
      * @return DinPartida
      */
-    public function getNewLine()
+    public function getNewLine(?Subcuenta $subcuenta = null): Partida
     {
         $partida = new DinPartida();
         $partida->concepto = $this->concepto;
         $partida->documento = $this->documento;
         $partida->idasiento = $this->primaryColumnValue();
+
+        if ($subcuenta) {
+            $partida->setAccount($subcuenta);
+        }
+
         return $partida;
     }
 
@@ -241,7 +248,7 @@ class Asiento extends Base\ModelOnChangeClass
             $haber += $line->haber;
         }
 
-        return self::toolBox()::utils()->floatcmp($debe, $haber, FS_NF0, true);
+        return Utils::floatcmp($debe, $haber, FS_NF0, true);
     }
 
     /**
@@ -281,10 +288,10 @@ class Asiento extends Base\ModelOnChangeClass
     {
         $exercise = new DinEjercicio();
         if (false === $exercise->loadFromCode($codejercicio)) {
-            self::toolBox()::i18nLog()->error('exercise-not-found', ['%code%' => $codejercicio]);
+            Tools::log()->error('exercise-not-found', ['%code%' => $codejercicio]);
             return false;
         } elseif (false === $exercise->isOpened()) {
-            self::toolBox()::i18nLog()->warning('closed-exercise', ['%exerciseName%' => $exercise->nombre]);
+            Tools::log()->warning('closed-exercise', ['%exerciseName%' => $exercise->nombre]);
             return false;
         }
 
@@ -297,7 +304,7 @@ class Asiento extends Base\ModelOnChangeClass
         $rows = self::$dataBase->selectLimit($sql, self::RENUMBER_LIMIT, $offset);
         while (!empty($rows)) {
             if (false === $this->renumberAccEntries($rows, $number)) {
-                self::toolBox()::i18nLog()->warning('renumber-accounting-error', ['%exerciseCode%' => $codejercicio]);
+                Tools::log()->warning('renumber-accounting-error', ['%exerciseCode%' => $codejercicio]);
                 return false;
             }
 
@@ -314,7 +321,7 @@ class Asiento extends Base\ModelOnChangeClass
         }
 
         if (false === $this->editable()) {
-            self::toolBox()::i18nLog()->warning('non-editable-accounting-entry');
+            Tools::log()->warning('non-editable-accounting-entry');
             return false;
         }
 
@@ -323,7 +330,7 @@ class Asiento extends Base\ModelOnChangeClass
         }
 
         // add audit log
-        self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info('updated-model', [
+        Tools::log(self::AUDIT_CHANNEL)->info('updated-model', [
             '%model%' => $this->modelClassName(),
             '%key%' => $this->primaryColumnValue(),
             '%desc%' => $this->primaryDescription(),
@@ -354,12 +361,11 @@ class Asiento extends Base\ModelOnChangeClass
 
     public function test(): bool
     {
-        $utils = self::toolBox()::utils();
-        $this->concepto = $utils->noHtml($this->concepto);
-        $this->documento = $utils->noHtml($this->documento);
+        $this->concepto = Tools::noHtml($this->concepto);
+        $this->documento = Tools::noHtml($this->documento);
 
         if (strlen($this->concepto) == 0 || strlen($this->concepto) > 255) {
-            self::toolBox()::i18nLog()->warning(
+            Tools::log()->warning(
                 'invalid-column-lenght', ['%column%' => 'concepto', '%min%' => '1', '%max%' => '255']
             );
             return false;
@@ -381,13 +387,13 @@ class Asiento extends Base\ModelOnChangeClass
     {
         switch ($field) {
             case 'codejercicio':
-                self::toolBox()::i18nLog()->warning('cant-change-accounting-entry-exercise');
+                Tools::log()->warning('cant-change-accounting-entry-exercise');
                 return false;
 
             case 'fecha':
                 $this->setDate($this->fecha);
                 if ($this->codejercicio != $this->previousData['codejercicio']) {
-                    self::toolBox()::i18nLog()->warning('cant-change-accounting-entry-exercise');
+                    Tools::log()->warning('cant-change-accounting-entry-exercise');
                     return false;
                 }
                 return true;

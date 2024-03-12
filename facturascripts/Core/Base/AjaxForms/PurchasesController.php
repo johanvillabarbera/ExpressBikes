@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of FacturaScripts
- * Copyright (C) 2021-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2021-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -28,6 +28,7 @@ use FacturaScripts\Core\Lib\ExtendedController\LogAuditTrait;
 use FacturaScripts\Core\Lib\ExtendedController\PanelController;
 use FacturaScripts\Core\Model\Base\PurchaseDocument;
 use FacturaScripts\Core\Model\Base\PurchaseDocumentLine;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\AssetManager;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Dinamic\Model\Variante;
@@ -107,13 +108,13 @@ abstract class PurchasesController extends PanelController
         ];
         foreach ($variante->codeModelSearch($query, 'referencia', $where) as $value) {
             $list[] = [
-                'key' => $this->toolBox()->utils()->fixHtml($value->code),
-                'value' => $this->toolBox()->utils()->fixHtml($value->description)
+                'key' => Tools::fixHtml($value->code),
+                'value' => Tools::fixHtml($value->description)
             ];
         }
 
         if (empty($list)) {
-            $list[] = ['key' => null, 'value' => $this->toolBox()->i18n()->trans('no-data')];
+            $list[] = ['key' => null, 'value' => Tools::lang()->trans('no-data')];
         }
 
         $this->response->setContent(json_encode($list));
@@ -132,8 +133,8 @@ abstract class PurchasesController extends PanelController
     {
         $pageData = $this->getPageData();
         $this->addHtmlView(static::MAIN_VIEW_NAME, static::MAIN_VIEW_TEMPLATE, $this->getModelClassName(), $pageData['title'], 'fas fa-file');
-        AssetManager::add('css', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css', 2);
-        AssetManager::add('js', FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js', 2);
+        AssetManager::addCss(FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.css', 2);
+        AssetManager::addJs(FS_ROUTE . '/node_modules/jquery-ui-dist/jquery-ui.min.js', 2);
         PurchasesHeaderHTML::assets();
         PurchasesLineHTML::assets();
         PurchasesFooterHTML::assets();
@@ -145,16 +146,16 @@ abstract class PurchasesController extends PanelController
 
         // comprobamos los permisos
         if (false === $this->permissions->allowDelete) {
-            self::toolBox()::i18nLog()->warning('not-allowed-delete');
+            Tools::log()->warning('not-allowed-delete');
             $this->response->setContent(
-                json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)])
+                json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)])
             );
             return false;
         }
 
         $model = $this->getModel();
         if (false === $model->delete()) {
-            $this->response->setContent(json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)]));
+            $this->response->setContent(json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)]));
             return false;
         }
 
@@ -223,11 +224,16 @@ abstract class PurchasesController extends PanelController
     protected function exportAction()
     {
         $this->setTemplate(false);
+
+        $subjectLang = $this->views[static::MAIN_VIEW_NAME]->model->getSubject()->langcode;
+        $requestLang = $this->request->request->get('langcode');
+        $langCode = $requestLang ?? $subjectLang ?? '';
+
         $this->exportManager->newDoc(
             $this->request->get('option', ''),
             $this->title,
             (int)$this->request->request->get('idformat', ''),
-            $this->request->request->get('langcode', '')
+            $langCode
         );
         $this->exportManager->addBusinessDocPage($this->views[static::MAIN_VIEW_NAME]->model);
         $this->exportManager->show($this->response);
@@ -240,7 +246,7 @@ abstract class PurchasesController extends PanelController
         $list = [];
         $term = $this->request->get('term');
         foreach ($supplier->codeModelSearch($term) as $item) {
-            $list[$item->code] = $item->code . ' | ' . $this->toolBox()->utils()->fixHtml($item->description);
+            $list[$item->code] = $item->code . ' | ' . Tools::fixHtml($item->description);
         }
         $this->response->setContent(json_encode($list));
         return false;
@@ -260,7 +266,7 @@ abstract class PurchasesController extends PanelController
             'linesMap' => [],
             'footer' => '',
             'products' => PurchasesModalHTML::renderProductList(),
-            'messages' => self::toolBox()::log()::read('', $this->logLevels)
+            'messages' => Tools::log()::read('', $this->logLevels)
         ];
         $this->response->setContent(json_encode($content));
         return false;
@@ -293,7 +299,7 @@ abstract class PurchasesController extends PanelController
                 $view->loadData($code);
                 $action = $this->request->request->get('action', '');
                 if ('' === $action && empty($view->model->primaryColumnValue())) {
-                    $this->toolBox()->i18nLog()->warning('record-not-found');
+                    Tools::log()->warning('record-not-found');
                     break;
                 }
 
@@ -326,7 +332,7 @@ abstract class PurchasesController extends PanelController
             'linesMap' => $renderLines ? [] : PurchasesLineHTML::map($lines, $model),
             'footer' => PurchasesFooterHTML::render($model),
             'products' => '',
-            'messages' => self::toolBox()::log()::read('', $this->logLevels)
+            'messages' => Tools::log()::read('', $this->logLevels)
         ];
         $this->response->setContent(json_encode($content));
         return false;
@@ -338,9 +344,9 @@ abstract class PurchasesController extends PanelController
 
         // comprobamos los permisos
         if (false === $this->permissions->allowUpdate) {
-            self::toolBox()::i18nLog()->warning('not-allowed-modify');
+            Tools::log()->warning('not-allowed-modify');
             $this->response->setContent(
-                json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)])
+                json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)])
             );
             return false;
         }
@@ -353,7 +359,7 @@ abstract class PurchasesController extends PanelController
         PurchasesFooterHTML::apply($model, $formData, $this->user);
 
         if (false === $model->save()) {
-            $this->response->setContent(json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)]));
+            $this->response->setContent(json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)]));
             $this->dataBase->rollback();
             return false;
         }
@@ -364,7 +370,7 @@ abstract class PurchasesController extends PanelController
 
         foreach ($lines as $line) {
             if (false === $line->save()) {
-                $this->response->setContent(json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)]));
+                $this->response->setContent(json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)]));
                 $this->dataBase->rollback();
                 return false;
             }
@@ -373,14 +379,14 @@ abstract class PurchasesController extends PanelController
         // remove missing lines
         foreach ($model->getLines() as $oldLine) {
             if (in_array($oldLine->idlinea, PurchasesLineHTML::getDeletedLines()) && false === $oldLine->delete()) {
-                $this->response->setContent(json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)]));
+                $this->response->setContent(json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)]));
                 $this->dataBase->rollback();
                 return false;
             }
         }
 
         if (false === $model->save()) {
-            $this->response->setContent(json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)]));
+            $this->response->setContent(json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)]));
             $this->dataBase->rollback();
             return false;
         }
@@ -396,26 +402,36 @@ abstract class PurchasesController extends PanelController
 
         // comprobamos los permisos
         if (false === $this->permissions->allowUpdate) {
-            self::toolBox()::i18nLog()->warning('not-allowed-modify');
+            Tools::log()->warning('not-allowed-modify');
             $this->response->setContent(
-                json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)])
+                json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)])
             );
             return false;
         }
 
+        // si la factura es de 0 €, la marcamos como pagada
         $model = $this->getModel();
-        $receipts = $model->getReceipts();
-        if (empty($receipts)) {
-            self::toolBox()::i18nLog()->warning('invoice-has-no-receipts');
-            $this->response->setContent(json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)]));
+        if (empty($model->total) && property_exists($model, 'pagada')) {
+            $model->pagada = (bool)$this->request->request->get('selectedLine');
+            $model->save();
+            $this->response->setContent(json_encode(['ok' => true, 'newurl' => $model->url() . '&action=save-ok']));
             return false;
         }
 
+        // comprobamos si tiene recibos
+        $receipts = $model->getReceipts();
+        if (empty($receipts)) {
+            Tools::log()->warning('invoice-has-no-receipts');
+            $this->response->setContent(json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)]));
+            return false;
+        }
+
+        // marcamos los recibos como pagados, eso marcará la factura como pagada
         foreach ($receipts as $receipt) {
             $receipt->nick = $this->user->nick;
             $receipt->pagado = (bool)$this->request->request->get('selectedLine');
             if (false === $receipt->save()) {
-                $this->response->setContent(json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)]));
+                $this->response->setContent(json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)]));
                 return false;
             }
         }
@@ -430,9 +446,9 @@ abstract class PurchasesController extends PanelController
 
         // comprobamos los permisos
         if (false === $this->permissions->allowUpdate) {
-            self::toolBox()::i18nLog()->warning('not-allowed-modify');
+            Tools::log()->warning('not-allowed-modify');
             $this->response->setContent(
-                json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)])
+                json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)])
             );
             return false;
         }
@@ -444,7 +460,7 @@ abstract class PurchasesController extends PanelController
         $model = $this->getModel();
         $model->idestado = (int)$this->request->request->get('selectedLine');
         if (false === $model->save()) {
-            $this->response->setContent(json_encode(['ok' => false, 'messages' => self::toolBox()::log()::read('', $this->logLevels)]));
+            $this->response->setContent(json_encode(['ok' => false, 'messages' => Tools::log()::read('', $this->logLevels)]));
             return false;
         }
 

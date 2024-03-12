@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of FacturaScripts
- * Copyright (C) 2020-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2020-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -33,6 +33,9 @@
         </column>
         <column name="supplier-reference" order="130">
             <widget type="text" fieldname="refproveedor"/>
+        </column>
+        <column name="description" order="135">
+            <widget type="textarea" fieldname="descripcion"/>
         </column>
         <column name="price" display="none" order="140">
             <widget type="money" fieldname="precio"/>

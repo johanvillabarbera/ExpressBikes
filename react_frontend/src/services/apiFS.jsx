@@ -7,7 +7,7 @@ const Axios = () => {
         baseURL: secrets.URL_FS,
         headers: {
             "Content-type": "application/json",
-            "token": "16o30KFkvXCYhfIqn4wL"
+            "token": "uAhuAqrVJEofMkoKwITU"
         }
     });
 

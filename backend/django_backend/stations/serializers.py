@@ -18,7 +18,8 @@ class StationSerializer(serializers.ModelSerializer):
             "img": instance.img,
             "longitude": instance.longitude,
             "latitude": instance.latitude,
-            "description": instance.description
+            "description": instance.description,
+            "tiempo": instance.tiempo
         }
 
     def create(context):

@@ -96,6 +96,12 @@ services:
       - ./astro_flowbite:/astro
     ports:
       - "2121:2121"
+    environment:
+      - VIRTUAL_HOST=astroexpress.compays.es
+      - LETSENCRYPT_HOST=astroexpress.compays.es
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    networks:
+      - webproxy
   
   #FACTURASCRIPTS / MYSQL / ADMINER
   mysql:

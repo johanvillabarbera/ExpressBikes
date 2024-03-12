@@ -19,9 +19,9 @@
 
 namespace FacturaScripts\Core\Internal;
 
-use FacturaScripts\Core\Base\ToolBox;
 use FacturaScripts\Core\Kernel;
 use FacturaScripts\Core\Plugins;
+use FacturaScripts\Core\Tools;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -54,7 +54,7 @@ final class Plugin
     public $min_version = 0;
 
     /** @var float */
-    public $min_php = 7.2;
+    public $min_php = 7.3;
 
     /** @var string */
     public $name = '-';
@@ -128,7 +128,7 @@ final class Plugin
                 continue;
             }
             if ($showErrors) {
-                ToolBox::i18nLog()->warning('plugin-needed', ['%pluginName%' => $require]);
+                Tools::log()->warning('plugin-needed', ['%pluginName%' => $require]);
             }
             return false;
         }
@@ -139,12 +139,17 @@ final class Plugin
                 continue;
             }
             if ($showErrors) {
-                ToolBox::i18nLog()->warning('php-extension-needed', ['%extensionName%' => $require]);
+                Tools::log()->warning('php-extension-needed', ['%extension%' => $require]);
             }
             return false;
         }
 
         return true;
+    }
+
+    public function disabled(): bool
+    {
+        return !$this->enabled;
     }
 
     public function exists(): bool
@@ -190,6 +195,7 @@ final class Plugin
         $pathIni = $zip->getNameIndex($zipIndex);
         $plugin->folder = substr($pathIni, 0, strpos($pathIni, '/'));
         $plugin->loadIniData($iniData);
+        $plugin->enabled = Plugins::isEnabled($plugin->name);
         $zip->close();
 
         return $plugin;
@@ -202,21 +208,30 @@ final class Plugin
 
     public function init(): bool
     {
-        // si el plugin no está activado o no tiene clase Init, no hacemos nada
+        // si el plugin no está activado y no tiene post_disable, no hacemos nada
+        if ($this->disabled() && !$this->post_disable) {
+            return false;
+        }
+
+        // si el plugin no tiene clase Init, no hacemos nada
         $className = 'FacturaScripts\\Plugins\\' . $this->name . '\\Init';
-        if (!$this->enabled || !class_exists($className)) {
+        if (!class_exists($className)) {
+            $this->post_disable = false;
+            $this->post_enable = false;
             return false;
         }
 
         // ejecutamos los procesos de la clase Init del plugin
         $init = new $className();
-        if ($this->post_enable) {
+        if ($this->enabled && $this->post_enable) {
             $init->update();
         }
-        if ($this->post_disable) {
+        if ($this->disabled() && $this->post_disable) {
             $init->uninstall();
         }
-        $init->init();
+        if ($this->enabled) {
+            $init->init();
+        }
 
         $done = $this->post_disable || $this->post_enable;
 
@@ -232,7 +247,7 @@ final class Plugin
         // si la versión de PHP es menor que la requerida, no es compatible
         if (version_compare(PHP_VERSION, $this->min_php, '<')) {
             $this->compatible = false;
-            $this->compatibilityDescription = ToolBox::i18n()->trans('plugin-phpversion-error', [
+            $this->compatibilityDescription = Tools::lang()->trans('plugin-phpversion-error', [
                 '%pluginName%' => $this->name,
                 '%php%' => $this->min_php
             ]);
@@ -242,7 +257,7 @@ final class Plugin
         // si la versión de FacturaScripts es menor que la requerida, no es compatible
         if (Kernel::version() < $this->min_version) {
             $this->compatible = false;
-            $this->compatibilityDescription = ToolBox::i18n()->trans('plugin-needs-fs-version', [
+            $this->compatibilityDescription = Tools::lang()->trans('plugin-needs-fs-version', [
                 '%pluginName%' => $this->name,
                 '%minVersion%' => $this->min_version,
                 '%version%' => Kernel::version()
@@ -253,7 +268,7 @@ final class Plugin
         // si la versión requerida es menor que 2021, no es compatible
         if ($this->min_version < 2020) {
             $this->compatible = false;
-            $this->compatibilityDescription = ToolBox::i18n()->trans('plugin-not-compatible', [
+            $this->compatibilityDescription = Tools::lang()->trans('plugin-not-compatible', [
                 '%pluginName%' => $this->name,
                 '%version%' => Kernel::version()
             ]);
@@ -297,7 +312,7 @@ final class Plugin
         $this->installed = $this->exists();
 
         $this->hidden = $this->hidden();
-        if (!$this->enabled) {
+        if ($this->disabled()) {
             $this->order = 0;
         }
 
@@ -312,6 +327,8 @@ final class Plugin
         }
 
         $iniData = parse_ini_file($iniPath);
-        $this->loadIniData($iniData);
+        if ($iniData) {
+            $this->loadIniData($iniData);
+        }
     }
 }

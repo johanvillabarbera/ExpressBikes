@@ -11,6 +11,9 @@ from .serializers import SlotSerializer
 from rest_framework.exceptions import NotFound
 from core.utils import check_all_fields
 from core.permissions import IsAdmin
+from weather.views import WeatherView
+from django.http import HttpRequest
+from decimal import Decimal
 
 from core.utils import notifyChangesWebSocket
 
@@ -18,6 +21,22 @@ class StationView(viewsets.GenericViewSet):
 
     def getData(self, request):
         stations = Station.objects.all()
+        vista_weather = WeatherView()
+
+        for station in stations:
+            # Llamada a la función getWeather para obtener información del tiempo
+            fake_request = HttpRequest()
+
+            lat_decimal = station.latitude.quantize(Decimal('0.0000001'))
+            lng_decimal = station.longitude.quantize(Decimal('0.0000001'))
+            fake_request.data = {'coordinates': {'lat': float(lat_decimal), 'lng': float(lng_decimal)}}
+
+            weather_info = vista_weather.getWeather(fake_request)
+
+            # Guardar la información del tiempo en el campo 'tiempo' de la estación
+            station.tiempo = weather_info.data
+            station.save()
+
         serializer = StationSerializer(stations, many=True)
         return Response(serializer.data)
 
@@ -148,7 +167,6 @@ class BikeViewAdmin(viewsets.GenericViewSet):
         serializer = BikeSerializer(bike, many=False)
 
         notifyChangesWebSocket('group_name', 'BIKE')
-        print("ssssssssss")
         return Response(serializer.data)
     
     def deleteBike(self, request, uuid):

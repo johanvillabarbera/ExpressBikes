@@ -1,11 +1,13 @@
-import { useContext, useState, useCallback } from "react"
-import WeatherService from "../../services/weather/WeatherService"
+import { useContext, useState, useCallback } from "react";
+import WeatherContext from "../../context/weather/WeatherContext";
+import WeatherService from "../../services/weather/WeatherService";
 
 export function useWeather() {
-    const [weather, setWeather] = useState({});
+    const { weather, setWeather } = useContext(WeatherContext);
 
-    const getWeather = useCallback(() => {
-        WeatherService.getWeather()
+    const getWeather = useCallback((coordinates) => {
+        console.log(coordinates);
+        WeatherService.getWeather(coordinates)
             .then(res => {
                 console.log('hola');
                 console.log(res);
