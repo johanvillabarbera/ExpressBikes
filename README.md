@@ -16,30 +16,51 @@ Express Bikes es una aplicación web de servicio de alquiler de bicicletas enfoc
 - **Docker**: Plataforma de contenedores utilizada para facilitar la implementación y el despliegue del proyecto.
 - **Arduino**: Plataforma de hardware y software de código abierto utilizada para la interacción con dispositivos físicos.
 
-## Páginas
+## Interfaz móvil
+
+A continuación vamos a mostrar las distintas páginas que se pueden ver si se utiliza la aplicación desde un dispositivo móvil
 
 ### Home
-En la página principal
+En la página principal podemos visualizar un mapa con la localización de las estaciones junto con un panel en la parte inferior con opciones para iniciar sesión o ver información sobre tu perfil.
 
-### Sign-up/Login
-Users can create a new account or log in to an existing one. JWT is used for user authentication and authorization.
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/f5123dfa-35df-4f26-8f23-9d96e3a92dda)
 
-### User Dashboard
-Once authenticated, users are directed to a dashboard where they can view their profile information, rental history, and available balance. They can also rent a bike from this page.
+### Login / Register
+Los usuarios pueden iniciar sesión o registrarse desde esta pestaña.
 
-### Rental Page
-On this page, users can select an available bike to rent, set the rental duration, and confirm the transaction.
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/0b39242c-6845-4922-b7cb-24b005b8de24)
 
-### Return Page
-After using the bike, users can return it from this page. They can view a summary of the rental, calculate the total cost, and confirm the return.
+### Estación
+En esta página se podrá ver información acerca de la estación seleccionada.
 
-### Admin Panel
-Administrators have access to a special panel where they can manage users, bikes, and transactions. They can add or delete users, view and modify bike information, and monitor transaction history.
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/23827d1f-ed81-4109-b7d6-ebd400ca7800)
 
-## Installation and Usage
+### Vista previa alquiler
+Desde aquí podemos ver la disponibilidad de una bicicleta a la hora de iniciar un alquiler, donde se tienen en cuenta factores como el inicio de sesión del usuario y los estados de la bici, del slot y de la estación.
 
-1. Clone this repository to your local machine.
-2. Install dependencies using npm:
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/ed9f1275-0710-4905-a62f-2f0155848a67)
 
-   ```bash
-   npm install
+### Vista alquiler
+La vista donde se inicia el alquiler, desde la que podremos ver nuestra ubicación actual junto con información acerca de la velocidad, el tiempo transcurrido y el precio total.
+
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/0075aeb4-f110-4212-a5f1-e03098126f77)
+
+## Detalles alquiler
+Cuando se finalize un alquiler, se redirigirá automáticamente a la pantalla de detalles de alquiler, donde se podrá ver la duración total del viaje, información sobre la bici y la opción para reportar una incidencia.
+
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/b7181d5d-33dd-45cc-aaab-64985725b976)
+
+## Reportar incidencia
+Desde esta pestaña se podrá reportar una incidencia sobre una bici, un slot o una estación.
+
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/7ac30f35-943f-4140-9070-c04b37277734)
+
+## Notificaciones
+En esta ventana se listarán las notificaciones relacionadas con las incidencias que el usuario ha publicado.
+
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/8d1c634a-b62c-4f7c-8af1-08e96c440c2e)
+
+## Clima
+Desde aquí se podrá obtener información del clima actual y del clima en las distintas estaciones.
+
+![image](https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/923beb60-1196-4c48-be41-d8dbff4a8e62)
