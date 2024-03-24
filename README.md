@@ -72,19 +72,19 @@ Las siguientes páginas se podrán ver desde un ordenador y estará más enfocad
 ## Home
 En la página principal podemos visualizar información general sobre la aplicación y el acceso a otras páginas.
 
-<img src="https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/ed2cc41a-03e7-4515-bcdd-04b2c1c9eb57" width="250">
+<img src="https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/ed2cc41a-03e7-4515-bcdd-04b2c1c9eb57" width="500">
 
 ## Login / Register
 Los usuarios pueden iniciar sesión o registrarse desde esta pestaña.
 
-<img src="https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/da968ef4-d915-44bd-81d2-99da55b300ad" width="250">
+<img src="https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/da968ef4-d915-44bd-81d2-99da55b300ad" width="500">
 
 ## Precios
 Desde esta pestaña podemos ver los planes disponibles para cada usuario, donde podrá contratar cada uno
 
-<img src="https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/473debaf-4cad-40d1-a936-c28336d448cf" width="250">
+<img src="https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/473debaf-4cad-40d1-a936-c28336d448cf" width="500">
 
 ## Dashboard Admin
 Desde aquí se podrán realizar acciones de administrador como listar, modificar, crear o eliminar bicis, slots o estaciones. También se podrá ver un mapa con las estaciones disponibles y un historial de las incidencias de los usuarios.
 
-<img src="https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/d3f92db7-0e4c-458f-80fa-702a5abf6f30" width="250">
+<img src="https://github.com/johanvillabarbera/ExpressBikes/assets/40963901/d3f92db7-0e4c-458f-80fa-702a5abf6f30" width="500">
